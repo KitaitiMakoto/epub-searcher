@@ -1,4 +1,5 @@
 require 'epub/parser'
+require 'epub/searcher'
 require 'epub-searcher/epub-file'
 
 module EPUBSearcher
@@ -54,6 +55,21 @@ module EPUBSearcher
 
     def file_path
       @epub_book.epub_file
+    end
+
+    private
+    def build_index
+      main_text = ''
+      index = {}
+      @epub_book.each_page_on_spine do |item|
+        content = Nokogiri::HTML(item.read)
+        index_build = EPUB::Searcher::XHTML::Seamless.new(content.root)
+        subindex, text = index_build.build_indices(content.at('body'))
+        index[main_text.length] = subindex
+        main_text << text
+      end
+      @main_text = main_text
+      @index = index
     end
   end
 end

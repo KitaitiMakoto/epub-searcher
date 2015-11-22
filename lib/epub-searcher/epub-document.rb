@@ -53,6 +53,13 @@ module EPUBSearcher
       return xhtml_spine
     end
 
+    def extract_index
+      unless @index
+        build_index
+      end
+      return @index
+    end
+
     def file_path
       @epub_book.epub_file
     end

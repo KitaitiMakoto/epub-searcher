@@ -34,12 +34,10 @@ module EPUBSearcher
     end
 
     def extract_main_text
-      main_text = ''
-      @epub_book.each_page_on_spine do |item|
-        content = Nokogiri::HTML(item.read)
-        main_text << content.at('body').text
+      unless @main_text
+        build_index
       end
-      return main_text
+      return @main_text
     end
 
     def extract_xhtml_spine

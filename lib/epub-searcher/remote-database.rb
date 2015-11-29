@@ -57,12 +57,14 @@ module EPUBSearcher
           :type => :ShortText,
         )
       end
-      @client.column_create(
-        :table => :Books,
-        :name => 'main_text',
-        :flags => 'COLUMN_SCALAR',
-        :type => :LongText,
-      )
+      ['main_text', 'indices'].each do |column|
+        @client.column_create(
+          :table => :Books,
+          :name => column,
+          :flags => 'COLUMN_SCALAR',
+          :type => :LongText,
+        )
+      end
     end
 
     def groonga_setup_db_terms
@@ -91,6 +93,7 @@ module EPUBSearcher
           :main_text => epub_document.extract_main_text,
           :title => epub_document.extract_title,
           :file_path => epub_document.file_path,
+          :indices => epub_document.extract_index.to_json
         }
       end
       @client.load(:table => :Books, :values => records.to_json)

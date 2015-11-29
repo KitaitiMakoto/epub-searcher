@@ -26,6 +26,7 @@ class TestRemoteDatabase < Test::Unit::TestCase
         {:table=>:Books, :name=>'file_path', :flags=>'COLUMN_SCALAR', :type=>:ShortText},
         {:table=>:Books, :name=>'title', :flags=>'COLUMN_SCALAR', :type=>:ShortText},
         {:table=>:Books, :name=>'main_text', :flags=>'COLUMN_SCALAR', :type=>:LongText},
+        {:table=>:Books, :name=>'indices', :flags=>'COLUMN_SCALAR', :type=>:LongText},
         {:table=>:Terms, :name=>'entries_author_index', :flags=>'COLUMN_INDEX|WITH_POSITION', :type=>:Books, :source=>'author'},
         {:table=>:Terms, :name=>'entries_main_text_index', :flags=>'COLUMN_INDEX|WITH_POSITION', :type=>:Books, :source=>'main_text'},
         {:table=>:Terms, :name=>'entries_title_index', :flags=>'COLUMN_INDEX|WITH_POSITION', :type=>:Books, :source=>'title'},
@@ -78,7 +79,7 @@ class TestRemoteDatabase < Test::Unit::TestCase
       :table => :Books,
       :query => 'query words',
       :match_columns => 'author,title,main_text',
-      :output_columns => 'author,title,snippet_html(main_text)',
+      :output_columns => 'author,title,snippet_html(main_text),epubcfi()',
       :command_version => 2
     }
     @database.client.expects(:select).with(select_params).returns(search_result)
@@ -87,7 +88,7 @@ class TestRemoteDatabase < Test::Unit::TestCase
       :table => :Books,
       :query => 'query words',
       :match_columns => 'author,title,main_text',
-      :output_columns => 'author,title,snippet_html(main_text)'
+      :output_columns => 'author,title,snippet_html(main_text),epubcfi()'
     )
   end
 

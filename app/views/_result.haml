@@ -1,4 +1,9 @@
 %li{:class => 'media'}
   %div{:class => 'media-body'}
-    %h4{:class => 'media-heading'}== #{result['title']} - #{result['author']}
+    %h4{:class => 'media-heading'}
+      - epub_title = "#{result['title']} - #{result['author']}"
+      - epub_uri = '/components/bibi/bib/i/index.html?book=' + Pathname(result['file_path']).sub_ext('').relative_path_from(Pathname(Padrino.root('data'))).to_path.gsub('/', '%2f') + '#' + result['epubcfi()'].to_s
+      = link_to epub_title, epub_uri
     = partial 'snippet', :collection => result['snippet_html(main_text)'] if result['snippet_html(main_text)']
+    = link_to epub_title, epub_uri, 'data-bibi' => 'embed', 'data-bibi-style' => 'width: 100%; height: 500px;'
+    %script{:src => '/components/bibi/bib/i.js'}

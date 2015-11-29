@@ -6,6 +6,7 @@
       "nWorkers": 4,
       "plugins": [
         "groonga",
+        "epubcfi",
         "search",
         "crud",
         "dump",
